@@ -1,0 +1,11 @@
+docker run -d \
+--name quran-postgres \
+-e POSTGRES_USER=postgres \
+-e POSTGRES_PASSWORD=postgres \
+-e POSTGRES_DB=quran_ai \
+-p 5432:5432 \
+pgvector/pgvector:pg17
+
+docker ps
+
+docker exec -it quran-postgres psql -U postgres -d quran_ai
