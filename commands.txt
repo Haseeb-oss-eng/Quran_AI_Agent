@@ -14,3 +14,5 @@ docker stop <container_id_or_name>
 docker rm <container_id_or_name>
 
 python -m scripts.ingest_quran
+
+INSTALL vss; LOAD vss;
