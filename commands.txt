@@ -9,3 +9,8 @@ pgvector/pgvector:pg17
 docker ps
 
 docker exec -it quran-postgres psql -U postgres -d quran_ai
+
+docker stop <container_id_or_name>
+docker rm <container_id_or_name>
+
+python -m scripts.ingest_quran
