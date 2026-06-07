@@ -1,11 +1,13 @@
-import duckdb 
-import pandas as pd
-from database.duckdb import get_duckdb_connection
-from read.
+from datasource import QuranReader
+from repository import QuranRepository
+from embeddings import QuranEmbedding
+from services import QuranIngestService
 
-def ingest_quran_duckdb():
-    connection = get_duckdb_connection()
+if __name__ == "__main__":
+    quran_reader = QuranReader()
+    quran_repo = QuranRepository()
+    quran_embedding = QuranEmbedding()
+    quran_services = QuranIngestService(quran_repo,quran_reader,quran_embedding)
 
-    try:
-        with connection as conn:
-            conn. 
+    if quran_services.is_successfull:
+        print("Data is ingested into Database")
