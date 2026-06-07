@@ -1,4 +1,5 @@
 from sentence_transformers import SentenceTransformer
+import pandas as pd
 
 class QuranEmbedding:
 
@@ -7,7 +8,7 @@ class QuranEmbedding:
         
     
     def embedding_encode(self,df:pd.DataFrame):
-        embedding = self.model.encode(self.df["Arabic Text"].tolist())
-        self.df["embedding"] = embedding.tolist()
+        embedding = self.model.encode(df["Arabic Text"].tolist())
+        df["embedding"] = embedding.tolist()
 
-        return self.df
+        return df

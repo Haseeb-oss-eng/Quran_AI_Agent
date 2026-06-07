@@ -1,4 +1,5 @@
-from database.duckdb import get_duckdb_connection
+from database.duckdb.duckdb_database_Conn import get_duckdb_connection
+import pandas as pd
 
 class QuranRepository:
 
@@ -6,26 +7,42 @@ class QuranRepository:
         self.db = get_duckdb_connection()
 
     def create_extension(self):
+        # Install and load the vector similarity search extension
         self.db.execute("INSTALL vss; LOAD vss;")
         return True
 
     def create_table(self):
-        if not create_extension():
-            self.create_extension()
-        self.db.execute("create table if not exist quran_verse(id SERIAL PRIMARY KEY, surah_no int not null, surah_name text not null, verse_no int not null, verse_text text not null, embedding VECTOR(384));")
+        self.create_extension()
+        self.db.execute("CREATE SEQUENCE IF NOT EXISTS quran_verse_id_seq START 1;")
+        self.db.execute("""
+            CREATE TABLE IF NOT EXISTS quran_verse (
+                id INT PRIMARY KEY DEFAULT nextval('quran_verse_id_seq'), 
+                surah_no INT NOT NULL, 
+                surah_name TEXT NOT NULL, 
+                verse_no INT NOT NULL, 
+                verse_text TEXT NOT NULL, 
+                embedding FLOAT[384]
+            );
+        """)
         return True
 
-    def insert_data(self,data:pd.DataFrame):
-        if not self.create_table():
-            self.create_table()
-        self.db.executemany("""
-                INSERT INTO quran SELECT surah_no, surah_name, verse_no, verse_text, embedding FROM quran_verse;
-
-            """)
+    def insert_data(self, data: pd.DataFrame):
+        self.create_table()
+        
+        self.db.execute("""
+            INSERT INTO quran_verse (surah_no, surah_name, verse_no, verse_text, embedding) 
+            SELECT "Surah Number", "Surah Name", "Verse Number", "Arabic Text", "embedding" FROM data;
+        """)
         return True
 
-    def select_from(self,limit = 1):
-        return self.db.execute("""SELECT surah_no, surah_name, verse_no, verse_text, embedding FROM quran_verse ?;""",limit).fetch_df()
+    def select_from(self, limit=1):
+        return self.db.execute("""
+            SELECT surah_no, surah_name, verse_no, verse_text, embedding 
+            FROM quran_verse 
+            LIMIT ?;
+        """, [limit]).fetch_df()
 
+    @property
     def table_length(self):
-        return self.db.execute("""SELECT count(surah_no) FROM quran_verse;""").fetch_df()
+        result = self.db.execute("SELECT COUNT(*) FROM quran_verse;").fetchone()
+        return result[0] if result else 0
