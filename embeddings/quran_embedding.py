@@ -1,10 +1,11 @@
 from sentence_transformers import SentenceTransformer
+from config import settings
 import pandas as pd
 
 class QuranEmbedding:
 
     def __init__(self):
-        self.model = SentenceTransformer('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')
+        self.model = SentenceTransformer(settings.EMBEDDING_MODEL)
         
     
     def embedding_encode(self,df:pd.DataFrame):

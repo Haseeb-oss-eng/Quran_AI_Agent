@@ -1,4 +1,4 @@
-from database.duckdb.duckdb_database_Conn import get_duckdb_connection
+from database.duckdb.duckdb_connection import get_duckdb_connection
 import pandas as pd
 
 class QuranRepository:
