@@ -1,8 +1,23 @@
-
 class QuranIngestService:
-    def __init__(self,database_repo:str,file:str,embedding:str):
-        self.repo = database_repo
-        self.df_data = file.read_file()
-        self.embedding_df = embedding.embedding_encode(self.df_data)
-        self.repo.insert_data(self.embedding_df)
-        self.is_successful = self.repo.table_length > 0
+
+    def __init__(
+        self,
+        repository,
+        reader,
+        embedder
+    ):
+        self.repository = repository
+        self.reader = reader
+        self.embedder = embedder
+
+    def ingest(self):
+
+        df = self.reader.read_file()
+
+        df["embedding"] = self.embedder.encode_batch(
+            df["Arabic Text"].tolist()
+        )
+
+        self.repository.insert_data(df)
+
+        return self.repository.table_length > 0

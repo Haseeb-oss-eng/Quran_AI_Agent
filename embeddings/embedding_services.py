@@ -8,8 +8,8 @@ class QuranEmbedding:
         self.model = SentenceTransformer(settings.EMBEDDING_MODEL)
         
     
-    def embedding_encode(self,df:pd.DataFrame):
-        embedding = self.model.encode(df["Arabic Text"].tolist())
-        df["embedding"] = embedding.tolist()
+    def encode(self, text):
+        return self.model.encode(text).tolist()
 
-        return df
+    def encode_batch(self, texts):
+        return self.model.encode(texts).tolist()

@@ -46,3 +46,15 @@ class QuranRepository:
     def table_length(self):
         result = self.db.execute("SELECT COUNT(*) FROM quran_verse;").fetchone()
         return result[0] if result else 0
+
+    def semantic_search(self,user_prompt):
+        return self.db.execute("""
+            SELECT surah_no,
+                    surah_name,
+                    verse_no,
+                    verse_text,
+                    list_cosine_similarity(embedding , ?::FLOAT[]) AS similarity,
+            FROM quran_verse
+            ORDER BY similarity DESC
+            limit 5;
+        """,[user_prompt]).fetch_df()
