@@ -1,17 +1,16 @@
-from retrieval.quran_search import QuranSearchService
+from retrieval.quran_search import QuranSearch
 from repository.quran_repository import QuranRepository
 from embeddings.embedding_services import QuranEmbedding
 
-repository = QuranRepository()
-embedder = QuranEmbedding()
+class QuranSearchService:
 
-quran_search = QuranSearchService(
-    repository,
-    embedder
-)
+    def build_search(self):
+        repository = QuranRepository()
+        embedder = QuranEmbedding()
 
-result = quran_search.search(
-    "Patience and Prayer"
-)
+        quran_search = QuranSearch(
+            repository,
+            embedder
+        )
 
-print(result)
+        return quran_search
