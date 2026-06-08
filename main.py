@@ -4,6 +4,9 @@ from retrieval.quran_search import QuranSearchService
 from repository.quran_repository import QuranRepository
 from embeddings.query_embedding import QuranEmbedding
 from rag.rag_services  import QuranRAGService
+from llm.ollama_client import OllamaClient
+
+llm = OllamaClient()
 
 repository = QuranRepository()
 
@@ -18,9 +21,6 @@ context_builder = ContextBuilder()
 
 prompt_builder = PromptBuilder()
 
-llm = OllamaLLM(
-    model="qwen3"
-)
 
 rag = QuranRAGService(
     search_service,
