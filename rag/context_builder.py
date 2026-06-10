@@ -4,7 +4,7 @@ class ContextBuilder:
 
         context = ""
 
-        for _, row in retrieval:
+        for _, row in retrieval.iterrows():
             context+=(
                 f"{row['surah_name']} "
                 f"{row['verse_no']} "

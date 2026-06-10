@@ -1,22 +1,34 @@
-
-
 class QuranRAGService:
 
-    def __init__(self,question,retrieval,context_builder,prompt_builder,llm):
-        self.question = question
-        self.retrieval = retrieval
-        self.context_builder = context_builder()
-        self.prompt_builder = prompt_builder()
+    def __init__(
+        self,
+        search_service,
+        context_builder,
+        prompt_builder,
+        llm
+    ):
+        self.search_service = search_service
+        self.context_builder = context_builder
+        self.prompt_builder = prompt_builder
         self.llm = llm
 
-    def pipeline(self):
-        context_ = self.context(self.retrieval)
+    def answer(self, question):
 
-        prompt_builder_ = self.prompt_builder(context_)
+        retrieval = self.search_service.search(
+            question
+        )
 
+        context = self.context_builder.build(
+            retrieval
+        )
 
+        prompt = self.prompt_builder.build(
+            question,
+            context
+        )
 
-    def answer(self):
-        self.pipeline()
+        response = self.llm.invoke(
+            prompt
+        )
 
-        return pass
+        return response

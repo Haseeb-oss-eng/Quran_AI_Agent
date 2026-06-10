@@ -2,11 +2,13 @@ from rag.context_builder import ContextBuilder
 from rag.prompt_builder  import PromptBuilder
 from retrieval.quran_search import QuranSearchService
 from repository.quran_repository import QuranRepository
-from embeddings.query_embedding import QuranEmbedding
+from embeddings.embedding_services import QuranEmbedding
 from rag.rag_services  import QuranRAGService
-from llm.ollama_client import OllamaClient
+#from llm.ollama_client import OllamaClient
+from llm.fake_llm import FakeLLM
 
-llm = OllamaClient()
+#llm = OllamaClient()
+llm = FakeLLM()
 
 repository = QuranRepository()
 
